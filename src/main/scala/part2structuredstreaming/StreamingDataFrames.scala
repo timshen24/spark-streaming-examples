@@ -64,15 +64,17 @@ object StreamingDataFrames {
       .format("console")
       .outputMode("append")
       .trigger(
-        // Trigger.ProcessingTime(2.seconds) // every 2 seconds run the query
+        // Trigger.ProcessingTime(2.seconds) // every 2 seconds run the query 处理2秒
         // Trigger.Once() // single batch, then terminate
         Trigger.Continuous(2.seconds) // experimental, every 2 seconds create a batch with whatever you have
+        // 每2秒checkpoint一次
       )
       .start()
       .awaitTermination()
   }
 
   def main(args: Array[String]): Unit = {
+//    readFromFiles()
     demoTriggers()
   }
 }
