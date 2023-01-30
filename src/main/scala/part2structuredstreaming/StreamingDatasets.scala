@@ -10,7 +10,7 @@ object StreamingDatasets {
     .appName("Streaming Datasets")
     .master("local[2]")
     .getOrCreate()
-
+  spark.sparkContext.setLogLevel("WARN")
   // include encoders for DF -> DS transformations
   import spark.implicits._
 

@@ -4,6 +4,9 @@ import org.apache.spark.sql.{Dataset, SparkSession}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.streaming.{GroupState, GroupStateTimeout}
 
+/**
+  * 有点像Spark的DataFrame
+  */
 object StatefulComputations {
 
   val spark = SparkSession.builder()

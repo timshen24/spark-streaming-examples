@@ -10,6 +10,8 @@ import org.apache.spark.sql.streaming.{StreamingQuery, Trigger}
 
 import scala.concurrent.duration._
 
+// watermark, which means how far back we consider records before dropping them
+// And how does far back means? It's the timestamp of the last record received
 object Watermarks {
   val spark = SparkSession.builder()
     .appName("Late Data with Watermarks")
@@ -51,7 +53,8 @@ object Watermarks {
       .toDF("created", "color")
 
     val watermarkedDF = dataDF
-      .withWatermark("created", "2 seconds") // adding a 2 second watermark
+      .withWatermark("created", "2 seconds") // adding a 2 second watermark, which means how far back we consider
+      // records before dropping them
       .groupBy(window(col("created"), "2 seconds"), col("color"))
       .count()
       .selectExpr("window.*", "color", "count")
@@ -59,7 +62,7 @@ object Watermarks {
     /*
       A 2 second watermark means
       - a window will only be considered until the watermark surpasses the window end
-      - an element/a row/a record will be considered if AFTER the watermark
+      - an element/a row/a record will be considered if it is still AFTER the watermark(means not too early!)
      */
 
     val query = watermarkedDF.writeStream
@@ -140,7 +143,9 @@ object DataSender {
   }
 
   def main(args: Array[String]): Unit = {
-    example3()
+    example1()
+//    example2()
+//    example3()
   }
 }
 
